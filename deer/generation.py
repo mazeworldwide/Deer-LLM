@@ -1,5 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# This software may be used and distributed in accordance with the terms of the Llama 3 Community License Agreement.
 
 import json
 import os
@@ -16,8 +14,8 @@ from fairscale.nn.model_parallel.initialize import (
     model_parallel_is_initialized,
 )
 
-from llama.model import ModelArgs, Transformer
-from llama.tokenizer import ChatFormat, Dialog, Message, Tokenizer
+from deer.model import ModelArgs, Transformer
+from deer.tokenizer import ChatFormat, Dialog, Message, Tokenizer
 
 
 class CompletionPrediction(TypedDict, total=False):
@@ -32,7 +30,7 @@ class ChatPrediction(TypedDict, total=False):
     logprobs: List[float]  # not required
 
 
-class Llama:
+class Deer:
     @staticmethod
     def build(
         ckpt_dir: str,
@@ -41,9 +39,9 @@ class Llama:
         max_batch_size: int,
         model_parallel_size: Optional[int] = None,
         seed: int = 1,
-    ) -> "Llama":
+    ) -> "Deer":
         """
-        Build a Llama instance by initializing and loading a model checkpoint.
+        Build a Deer instance by initializing and loading a model checkpoint.
 
         Args:
             ckpt_dir (str): Path to the directory containing checkpoint files.
@@ -54,7 +52,7 @@ class Llama:
                 If not provided, it's determined from the environment. Defaults to None.
 
         Returns:
-            Llama: An instance of the Llama class with the loaded model and tokenizer.
+            Deer: An instance of the Deer class with the loaded model and tokenizer.
 
         Raises:
             AssertionError: If there are no checkpoint files in the specified directory,
@@ -110,7 +108,7 @@ class Llama:
         model.load_state_dict(checkpoint, strict=False)
         print(f"Loaded in {time.time() - start_time:.2f} seconds")
 
-        return Llama(model, tokenizer)
+        return Deer(model, tokenizer)
 
     def __init__(self, model: Transformer, tokenizer: Tokenizer):
         self.model = model

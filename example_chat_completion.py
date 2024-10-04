@@ -1,11 +1,9 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# This software may be used and distributed in accordance with the terms of the Llama 3 Community License Agreement.
 
 from typing import List, Optional
 
 import fire
 
-from llama import Dialog, Llama
+from deer import Dialog, deerai
 
 
 def main(
@@ -17,18 +15,8 @@ def main(
     max_batch_size: int = 4,
     max_gen_len: Optional[int] = None,
 ):
-    """
-    Examples to run with the models finetuned for chat. Prompts correspond of chat
-    turns between the user and assistant with the final one always being the user.
 
-    An optional system prompt at the beginning to control how the model should respond
-    is also supported.
-
-    The context window of llama3 models is 8192 tokens, so `max_seq_len` needs to be <= 8192.
-
-    `max_gen_len` is optional because finetuned models are able to stop generations naturally.
-    """
-    generator = Llama.build(
+    generator = deerai.build(
         ckpt_dir=ckpt_dir,
         tokenizer_path=tokenizer_path,
         max_seq_len=max_seq_len,

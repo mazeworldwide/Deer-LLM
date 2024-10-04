@@ -1,5 +1,3 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# This software may be used and distributed in accordance with the terms of the Llama 3 Community License Agreement.
 
 import math
 from dataclasses import dataclass
@@ -7,7 +5,10 @@ from typing import Optional, Tuple
 
 import fairscale.nn.model_parallel.initialize as fs_init
 import torch
+import torch.nn as nn
+import torch.quantization as quant
 import torch.nn.functional as F
+import torch.nn.utils.prune as prune
 from fairscale.nn.model_parallel.layers import (
     ColumnParallelLinear,
     RowParallelLinear,
@@ -17,21 +18,32 @@ from torch import nn
 
 
 @dataclass
+class ModifiedDeer(nn.Module):
+    def __init__(self, original_model):
+        super(ModifiedDeer, self).__init__()
+        self.original_model = original_model
+        self.extra_layer = nn.Linear(768, 768)  
+
+    def forward(self, input):
+        output = self.original_model(input)
+        output = self.extra_layer(output)
+        return output
+    
 class ModelArgs:
     dim: int = 4096
     n_layers: int = 32
     n_heads: int = 32
     n_kv_heads: Optional[int] = None
     vocab_size: int = -1
-    multiple_of: int = 256  # make SwiGLU hidden layer size multiple of large power of 2
+    multiple_of: int = 256 
     ffn_dim_multiplier: Optional[float] = None
     norm_eps: float = 1e-5
     rope_theta: float = 500000
 
     max_batch_size: int = 32
     max_seq_len: int = 2048
-
-
+quantized_model = torch.quantization.quantize_dynamic(model, {torch.nn.Linear}, dtype=torch.qint8)
+prune.l1_unstructured(model.layer, name='weight', amount=0.2) 
 class RMSNorm(torch.nn.Module):
     def __init__(self, dim: int, eps: float = 1e-6):
         super().__init__()

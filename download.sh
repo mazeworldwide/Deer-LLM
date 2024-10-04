@@ -1,11 +1,4 @@
-#!/usr/bin/env bash
 
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# This software may be used and distributed according to the terms of the Llama 2 Community License Agreement.
-
-####
-## NOTE: For downloading Llama 3.1 please refer to https://github.com/meta-llama/llama-models/tree/main/models/llama3_1#download
-####
 
 set -e
 
@@ -27,19 +20,19 @@ for m in ${MODEL_SIZE//,/ }
 do
     if [[ $m == "8B" ]] || [[ $m == "8b" ]]; then
         SHARD=0
-        MODEL_FOLDER_PATH="Meta-Llama-3-8B"
+        MODEL_FOLDER_PATH="Maze-Deer-3-8B"
         MODEL_PATH="8b_pre_trained"
     elif [[ $m == "8B-instruct" ]] || [[ $m == "8b-instruct" ]] || [[ $m == "8b-Instruct" ]] || [[ $m == "8B-Instruct" ]]; then
         SHARD=0
-        MODEL_FOLDER_PATH="Meta-Llama-3-8B-Instruct"
+        MODEL_FOLDER_PATH="Maze-Deer-8B-Instruct"
         MODEL_PATH="8b_instruction_tuned"
     elif [[ $m == "70B" ]] || [[ $m == "70b" ]]; then
         SHARD=7
-        MODEL_FOLDER_PATH="Meta-Llama-3-70B"
+        MODEL_FOLDER_PATH="Maze-Deer-70B"
         MODEL_PATH="70b_pre_trained"
     elif [[ $m == "70B-instruct" ]] || [[ $m == "70b-instruct" ]] || [[ $m == "70b-Instruct" ]] || [[ $m == "70B-Instruct" ]]; then
         SHARD=7
-        MODEL_FOLDER_PATH="Meta-Llama-3-70B-Instruct"
+        MODEL_FOLDER_PATH="Maze-Deer-70B-Instruct"
         MODEL_PATH="70b_instruction_tuned"
     fi
 
